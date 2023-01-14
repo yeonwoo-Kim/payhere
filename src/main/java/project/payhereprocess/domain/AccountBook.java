@@ -2,7 +2,6 @@ package project.payhereprocess.domain;
 
 import lombok.Builder;
 import lombok.Getter;
-import project.payhereprocess.presentation.accountbook.dto.AccountRequestDto;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
