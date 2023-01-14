@@ -1,7 +1,6 @@
 package project.payhereprocess.presentation.user.dto;
 
 import lombok.Data;
-import lombok.Getter;
 import project.payhereprocess.business.command.UserCommand;
 
 import javax.validation.constraints.Email;
@@ -11,6 +10,7 @@ public class SignupRequestDto {
     @Email
     private String email;
     private String password;
+
     public UserCommand toCommand() {
         return new UserCommand(email, password);
     }

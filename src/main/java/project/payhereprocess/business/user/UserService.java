@@ -15,7 +15,7 @@ public class UserService {
     public UserResponseDto command(UserCommand command) {
         // 가입된 회원인지 체크
         Boolean isExists = userRepository.existsByEmail(command.getEmail());
-        if(isExists) throw new RuntimeException(command.getEmail());
+        if (isExists) throw new RuntimeException(command.getEmail());
 
         User newUser = User
                 .builder()
