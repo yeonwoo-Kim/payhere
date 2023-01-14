@@ -1,4 +1,4 @@
-package project.payhereprocess.business.command;
+package project.payhereprocess.presentation.user.dto;
 
 import lombok.Data;
 

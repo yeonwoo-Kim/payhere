@@ -2,16 +2,19 @@ package project.payhereprocess.business.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import project.payhereprocess.business.command.UserCommand;
-import project.payhereprocess.business.command.UserResponseDto;
+import project.payhereprocess.business.user.command.UserCommand;
+import project.payhereprocess.presentation.user.dto.UserResponseDto;
 import project.payhereprocess.domain.User;
 import project.payhereprocess.persistence.user.UserRepository;
+
+import javax.transaction.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
 
+    @Transactional
     public UserResponseDto command(UserCommand command) {
         // 가입된 회원인지 체크
         Boolean isExists = userRepository.existsByEmail(command.getEmail());

@@ -1,4 +1,4 @@
-package project.payhereprocess.business.command;
+package project.payhereprocess.business.user.command;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,8 @@
 package project.payhereprocess.domain;
 
+import lombok.Builder;
 import lombok.Getter;
+import project.payhereprocess.presentation.accountbook.dto.AccountRequestDto;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 public class AccountBook {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -27,10 +29,19 @@ public class AccountBook {
     private LocalDateTime updateDate;
 
     @Column(name = "isDeleted")
-    @Enumerated(EnumType.STRING)
-    private isDeleted isDeleted;
+    private String isDeleted;
 
     @ManyToOne
     @JoinColumn(name = "email")
     private User user;
+
+    @Builder
+    public AccountBook(Long amount, String memo, LocalDateTime useDate, LocalDateTime updateDate, String isDeleted, User user) {
+        this.amount = amount;
+        this.memo = memo;
+        this.useDate = useDate;
+        this.updateDate = updateDate;
+        this.isDeleted = isDeleted;
+    }
+
 }

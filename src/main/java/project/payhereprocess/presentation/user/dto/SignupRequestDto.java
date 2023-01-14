@@ -1,7 +1,7 @@
 package project.payhereprocess.presentation.user.dto;
 
 import lombok.Data;
-import project.payhereprocess.business.command.UserCommand;
+import project.payhereprocess.business.user.command.UserCommand;
 
 import javax.validation.constraints.Email;
 
