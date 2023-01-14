@@ -1,8 +1,6 @@
 package project.payhereprocess.presentation.accountbook.dto;
 
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
-
 
 @Data
 public class AccountResponseDto {
