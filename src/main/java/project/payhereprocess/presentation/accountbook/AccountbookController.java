@@ -18,7 +18,7 @@ public class AccountbookController {
     private final AccountBookService accountbookService;
 
     @PostMapping("/account/add")
-    public ResponseEntity<AccountResponseDto> insert(@RequestBody AccountRequestDto dto) throws Exception {
+    public ResponseEntity<AccountResponseDto> insert(@RequestBody AccountRequestDto dto) {
         AccountCommand command = dto.toCommand();
         AccountResponseDto response = accountbookService.registerAccountBook(command);
         return new ResponseEntity(response, HttpStatus.CREATED);

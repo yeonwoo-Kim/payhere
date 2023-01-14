@@ -11,7 +11,6 @@ import project.payhereprocess.presentation.accountbook.dto.AccountResponseDto;
 import project.payhereprocess.presentation.accountbook.dto.GetAllAccountBookResponseDto;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -21,13 +20,15 @@ public class AccountBookService {
     private final UserRepository userRepository;
 
     @Transactional
-    public AccountResponseDto registerAccountBook(AccountCommand command) throws Exception {
+    public AccountResponseDto registerAccountBook(AccountCommand command) {
+        User findUser = userRepository.findByEmail(command.getEmail())
+                .orElseThrow(() -> new RuntimeException(command.getEmail()));
+
         AccountBook newAccount = AccountBook.builder()
                 .amount(command.getAmount())
                 .memo(command.getMemo())
-                .useDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
-                .isDeleted("N").build();
+                .user(findUser)
+                .build();
         AccountBook savedAccount = accountbookRepository.save(newAccount);
         return new AccountResponseDto("email", savedAccount.getAmount(), savedAccount.getMemo(), "가계부 내역이 저장되었습니다.");
     }
@@ -35,10 +36,10 @@ public class AccountBookService {
     @Transactional
     public List<GetAllAccountBookResponseDto> getAllAccount(String email) {
         // 사용자가 존재하는지 확인
-        User savedUser = userRepository.findByEmail(email)
+        User findUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException(email));
         // 사용자 id로 account book 조회
-        List<AccountBook> savedAccountList = accountbookRepository.findAllByUserId(savedUser.getId());
+        List<AccountBook> savedAccountList = accountbookRepository.findAllByUserId(findUser.getId());
 
         // account boot entity list를 response dto list로 변환
         return savedAccountList.stream().map(accountBook -> GetAllAccountBookResponseDto.from(accountBook)).toList();

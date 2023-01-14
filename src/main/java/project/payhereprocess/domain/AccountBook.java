@@ -23,24 +23,22 @@ public class AccountBook {
     private String memo;
 
     @Column(name = "useDate")
-    private LocalDateTime useDate;
+    private LocalDateTime useDate = LocalDateTime.now();
 
     @Column(name = "updateDate")
-    private LocalDateTime updateDate;
+    private LocalDateTime updateDate = LocalDateTime.now();
 
     @Column(name = "isDeleted")
-    private String isDeleted;
+    private String isDeleted = "N";
 
     @ManyToOne
     @JoinColumn(name = "email")
     private User user;
 
     @Builder
-    public AccountBook(Long amount, String memo, LocalDateTime useDate, LocalDateTime updateDate, String isDeleted, User user) {
+    public AccountBook(Long amount, String memo, String isDeleted, User user) {
         this.amount = amount;
         this.memo = memo;
-        this.useDate = useDate;
-        this.updateDate = updateDate;
         this.isDeleted = isDeleted;
     }
 
