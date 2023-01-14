@@ -1,4 +1,4 @@
-package project.payhereprocess.persistence.accountbookRepository;
+package project.payhereprocess.persistence.accountbook;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import project.payhereprocess.domain.AccountBook;

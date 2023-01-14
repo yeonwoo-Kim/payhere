@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import project.payhereprocess.business.accountbook.command.AccountCommand;
 import project.payhereprocess.domain.AccountBook;
 import project.payhereprocess.domain.User;
-import project.payhereprocess.persistence.accountbookRepository.AccountbookRepository;
+import project.payhereprocess.persistence.accountbook.AccountbookRepository;
 import project.payhereprocess.persistence.user.UserRepository;
 import project.payhereprocess.presentation.accountbook.dto.AccountResponseDto;
 import project.payhereprocess.presentation.accountbook.dto.GetAllAccountBookResponseDto;
@@ -16,12 +16,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class AccountbookService {
+public class AccountBookService {
     private final AccountbookRepository accountbookRepository;
     private final UserRepository userRepository;
 
     @Transactional
-    public AccountResponseDto command(AccountCommand command) throws Exception {
+    public AccountResponseDto registerAccountBook(AccountCommand command) throws Exception {
         AccountBook newAccount = AccountBook.builder()
                 .amount(command.getAmount())
                 .memo(command.getMemo())
