@@ -10,9 +10,9 @@ public class AccountRequestDto {
     private Long amount;
     private String memo;
     @Email
-    private String email;
+    private Long userId;
 
     public AccountCommand toCommand() {
-        return new AccountCommand(amount, memo, email);
+        return new AccountCommand(amount, memo, userId);
     }
 }

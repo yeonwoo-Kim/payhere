@@ -21,8 +21,8 @@ public class AccountBookService {
 
     @Transactional
     public AccountResponseDto registerAccountBook(AccountCommand command) {
-        User findUser = userRepository.findByEmail(command.getEmail())
-                .orElseThrow(() -> new RuntimeException(command.getEmail()));
+        User findUser = userRepository.findById(command.getUserId())
+                .orElseThrow(() -> new RuntimeException(String.valueOf(command.getUserId())));
 
         AccountBook newAccount = AccountBook.builder()
                 .amount(command.getAmount())
@@ -34,10 +34,10 @@ public class AccountBookService {
     }
 
     @Transactional
-    public List<GetAllAccountBookResponseDto> getAllAccount(String email) {
+    public List<GetAllAccountBookResponseDto> getAllAccount(Long userId) {
         // 사용자가 존재하는지 확인
-        User findUser = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException(email));
+        User findUser = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException(String.valueOf(userId)));
         // 사용자 id로 account book 조회
         List<AccountBook> savedAccountList = accountBookRepository.findAllByUserId(findUser.getId());
 

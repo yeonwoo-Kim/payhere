@@ -1,7 +1,9 @@
 package project.payhereprocess.domain;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -9,6 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "account_book")
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AccountBook {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,14 +34,14 @@ public class AccountBook {
     private String isDeleted = "N";
 
     @ManyToOne
-    @JoinColumn(name = "email")
+    @JoinColumn(name = "userId")
     private User user;
 
     @Builder
-    public AccountBook(Long amount, String memo, String isDeleted, User user) {
+    public AccountBook(Long amount, String memo, User user) {
         this.amount = amount;
         this.memo = memo;
-        this.isDeleted = isDeleted;
+        this.user = user;
     }
 
 }

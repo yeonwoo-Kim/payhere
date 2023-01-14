@@ -24,9 +24,9 @@ public class AccountbookController {
         return new ResponseEntity(response, HttpStatus.CREATED);
     }
 
-    @GetMapping("/account/all/{email}")
-    public ResponseEntity<List<GetAllAccountBookResponseDto>> getAllAccountBook(@PathVariable String email) {
-        List<GetAllAccountBookResponseDto> responseDtoList = accountbookService.getAllAccount(email);
+    @GetMapping("/account/all/{userId}")
+    public ResponseEntity<List<GetAllAccountBookResponseDto>> getAllAccountBook(@PathVariable Long userId) {
+        List<GetAllAccountBookResponseDto> responseDtoList = accountbookService.getAllAccount(userId);
 
         return ResponseEntity.ok(responseDtoList);
     }

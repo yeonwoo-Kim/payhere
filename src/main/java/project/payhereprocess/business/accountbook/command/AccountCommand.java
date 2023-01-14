@@ -8,5 +8,5 @@ import lombok.RequiredArgsConstructor;
 public class AccountCommand {
     private final Long amount;
     private final String memo;
-    private final String email;
+    private final Long userId;
 }
