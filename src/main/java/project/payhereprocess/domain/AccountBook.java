@@ -51,4 +51,14 @@ public class AccountBook {
         return this;
     }
 
+    public AccountBook delete() {
+        this.isDeleted = true;
+        return this;
+    }
+
+    public AccountBook restore() {
+        this.isDeleted = false;
+        return this;
+    }
+
 }

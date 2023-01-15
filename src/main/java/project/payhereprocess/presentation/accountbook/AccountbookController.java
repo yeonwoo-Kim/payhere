@@ -6,10 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.payhereprocess.business.accountbook.AccountBookService;
 import project.payhereprocess.business.accountbook.command.AccountCommand;
-import project.payhereprocess.presentation.accountbook.dto.AccountRequestDto;
-import project.payhereprocess.presentation.accountbook.dto.AccountResponseDto;
-import project.payhereprocess.presentation.accountbook.dto.AccountUpdateRequestDto;
-import project.payhereprocess.presentation.accountbook.dto.GetAllAccountBookResponseDto;
+import project.payhereprocess.presentation.accountbook.dto.*;
 
 import java.util.List;
 
@@ -35,6 +32,18 @@ public class AccountbookController {
     @PostMapping("/account/{id}/edit")
     public ResponseEntity<AccountResponseDto> update(@PathVariable Long id, @RequestBody AccountUpdateRequestDto dto) {
         AccountResponseDto response = accountbookService.updateAccountBook(id, dto);
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/account/delete")
+    public ResponseEntity<AccountResponseMessageDto> delete(@RequestParam Long id) {
+        AccountResponseMessageDto response = accountbookService.deleteAccountBook(id);
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/account/restore")
+    public ResponseEntity<AccountResponseMessageDto> restore(@RequestParam Long id) {
+        AccountResponseMessageDto response = accountbookService.restoreAccountBook(id);
         return new ResponseEntity(response, HttpStatus.OK);
     }
 }

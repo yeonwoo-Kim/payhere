@@ -8,6 +8,7 @@ import project.payhereprocess.domain.User;
 import project.payhereprocess.persistence.accountbook.AccountBookRepository;
 import project.payhereprocess.persistence.user.UserRepository;
 import project.payhereprocess.presentation.accountbook.dto.AccountResponseDto;
+import project.payhereprocess.presentation.accountbook.dto.AccountResponseMessageDto;
 import project.payhereprocess.presentation.accountbook.dto.AccountUpdateRequestDto;
 import project.payhereprocess.presentation.accountbook.dto.GetAllAccountBookResponseDto;
 
@@ -59,4 +60,36 @@ public class AccountBookService {
 
         return new AccountResponseDto(accountBookForUpdate.getUser().getEmail(), accountBookForUpdate.getAmount(), accountBookForUpdate.getMemo(), "정상적으로 수정되었습니다.");
     }
+
+    @Transactional
+    public AccountResponseMessageDto deleteAccountBook(Long id) {
+        // 해당하는 Account 내역 조회
+        AccountBook accountBookForDelete = accountBookRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(String.valueOf(id)));
+
+
+        if (accountBookForDelete.getIsDeleted()) {
+            return new AccountResponseMessageDto(id, "이미 삭제된 내역입니다.");
+        } else {
+            accountBookForDelete.delete();
+            return new AccountResponseMessageDto(id, "정상적으로 삭제되었습니다.");
+        }
+    }
+
+    @Transactional
+    public AccountResponseMessageDto restoreAccountBook(Long id) {
+        // 해당하는 Account 내역 조회
+        AccountBook accountBookForRestore = accountBookRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(String.valueOf(id)));
+
+        if (accountBookForRestore.getIsDeleted()) {
+            accountBookForRestore.restore();
+            return new AccountResponseMessageDto(id, "정상적으로 복구되었습니다.");
+        } else {
+            return new AccountResponseMessageDto(id, "이미 존재하는 내역입니다.");
+        }
+    }
+
+    @Transactional
+    public
 }
