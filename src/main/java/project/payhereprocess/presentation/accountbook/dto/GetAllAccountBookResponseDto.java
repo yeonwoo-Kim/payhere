@@ -14,7 +14,7 @@ public class GetAllAccountBookResponseDto {
     private final String memo;
     private final LocalDateTime useDate;
     private final LocalDateTime updateDate;
-    private final String isDeleted;
+    private final Boolean isDeleted;
 
     public static GetAllAccountBookResponseDto from(AccountBook accountBook) {
         return GetAllAccountBookResponseDto.builder()

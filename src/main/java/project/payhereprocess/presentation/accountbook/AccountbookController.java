@@ -8,6 +8,7 @@ import project.payhereprocess.business.accountbook.AccountBookService;
 import project.payhereprocess.business.accountbook.command.AccountCommand;
 import project.payhereprocess.presentation.accountbook.dto.AccountRequestDto;
 import project.payhereprocess.presentation.accountbook.dto.AccountResponseDto;
+import project.payhereprocess.presentation.accountbook.dto.AccountUpdateRequestDto;
 import project.payhereprocess.presentation.accountbook.dto.GetAllAccountBookResponseDto;
 
 import java.util.List;
@@ -29,5 +30,11 @@ public class AccountbookController {
         List<GetAllAccountBookResponseDto> responseDtoList = accountbookService.getAllAccount(userId);
 
         return ResponseEntity.ok(responseDtoList);
+    }
+
+    @PostMapping("/account/{id}/edit")
+    public ResponseEntity<AccountResponseDto> update(@PathVariable Long id, @RequestBody AccountUpdateRequestDto dto) {
+        AccountResponseDto response = accountbookService.updateAccountBook(id, dto);
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 }

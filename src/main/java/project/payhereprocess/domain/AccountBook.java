@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import project.payhereprocess.presentation.accountbook.dto.AccountUpdateRequestDto;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -31,7 +32,7 @@ public class AccountBook {
     private LocalDateTime updateDate = LocalDateTime.now();
 
     @Column(name = "isDeleted")
-    private String isDeleted = "N";
+    private Boolean isDeleted = false;
 
     @ManyToOne
     @JoinColumn(name = "userId")
@@ -42,6 +43,12 @@ public class AccountBook {
         this.amount = amount;
         this.memo = memo;
         this.user = user;
+    }
+
+    public AccountBook update(AccountUpdateRequestDto dto) {
+        this.amount = dto.getAmount();
+        this.memo = dto.getMemo();
+        return this;
     }
 
 }

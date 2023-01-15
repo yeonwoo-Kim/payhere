@@ -8,6 +8,7 @@ import project.payhereprocess.domain.User;
 import project.payhereprocess.persistence.accountbook.AccountBookRepository;
 import project.payhereprocess.persistence.user.UserRepository;
 import project.payhereprocess.presentation.accountbook.dto.AccountResponseDto;
+import project.payhereprocess.presentation.accountbook.dto.AccountUpdateRequestDto;
 import project.payhereprocess.presentation.accountbook.dto.GetAllAccountBookResponseDto;
 
 import javax.transaction.Transactional;
@@ -38,10 +39,24 @@ public class AccountBookService {
         // 사용자가 존재하는지 확인
         User findUser = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException(String.valueOf(userId)));
+
         // 사용자 id로 account book 조회
         List<AccountBook> savedAccountList = accountBookRepository.findAllByUserId(findUser.getId());
 
         // account boot entity list를 response dto list로 변환
         return savedAccountList.stream().map(accountBook -> GetAllAccountBookResponseDto.from(accountBook)).toList();
+    }
+
+    @Transactional
+    public AccountResponseDto updateAccountBook(Long id, AccountUpdateRequestDto dto) {
+        // 해당하는 Account 내역 조회
+        AccountBook accountBookForUpdate = accountBookRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(String.valueOf(id)));
+
+        if (accountBookForUpdate.getIsDeleted()) {
+            new RuntimeException(String.valueOf(id));
+        } else accountBookForUpdate.update(dto);
+
+        return new AccountResponseDto(accountBookForUpdate.getUser().getEmail(), accountBookForUpdate.getAmount(), accountBookForUpdate.getMemo(), "정상적으로 수정되었습니다.");
     }
 }
