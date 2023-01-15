@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import project.payhereprocess.business.user.UserService;
 import project.payhereprocess.business.user.command.UserCommand;
+import project.payhereprocess.presentation.user.dto.LoginRequestDto;
 import project.payhereprocess.presentation.user.dto.SignupRequestDto;
+import project.payhereprocess.presentation.user.dto.TokenDto;
 import project.payhereprocess.presentation.user.dto.UserResponseDto;
 
 import javax.validation.Valid;
@@ -31,5 +33,9 @@ public class UserController {
         return new ResponseEntity(response, HttpStatus.CREATED);
     }
 
-
+    @PostMapping("/user/login")
+    public ResponseEntity<TokenDto> login(@RequestBody @Valid LoginRequestDto dto) {
+        TokenDto user = userService.login(dto);
+        return ResponseEntity.ok(user);
+    }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class AccountbookController {
+public class AccountBookController {
     private final AccountBookService accountbookService;
 
     @PostMapping("/account/add")

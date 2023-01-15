@@ -12,6 +12,11 @@ spring:
         format_sql: true
         show_sql: true
 
+jwt:
+  header: Authorization
+  secret: and0LXRva2VuLXBheWhlcmUtcHJvY2Vzcy1qd3QtdG9rZW4tcGF5aGVyZS1wcm9jZXNzLWp3dC10b2tlbi1wYXloZXJlLXByb2Nlc3Mtand0LXRva2VuLXBheWhlcmUtcHJvY2Vzcy0=
+  token-validity-in-seconds: 86400
+
 springdoc:
   api-docs:
     path: /api-docs
@@ -24,3 +29,4 @@ springdoc:
     disable-swagger-default-url: true
   paths-to-match:
     - /**
+
