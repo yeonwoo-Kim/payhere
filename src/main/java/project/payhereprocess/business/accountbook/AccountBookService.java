@@ -7,10 +7,7 @@ import project.payhereprocess.domain.AccountBook;
 import project.payhereprocess.domain.User;
 import project.payhereprocess.persistence.accountbook.AccountBookRepository;
 import project.payhereprocess.persistence.user.UserRepository;
-import project.payhereprocess.presentation.accountbook.dto.AccountResponseDto;
-import project.payhereprocess.presentation.accountbook.dto.AccountResponseMessageDto;
-import project.payhereprocess.presentation.accountbook.dto.AccountUpdateRequestDto;
-import project.payhereprocess.presentation.accountbook.dto.GetAllAccountBookResponseDto;
+import project.payhereprocess.presentation.accountbook.dto.*;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -91,5 +88,11 @@ public class AccountBookService {
     }
 
     @Transactional
-    public
+    public AccountDetailResponseDto detailAccountBook(Long id) {
+        AccountBook detailAccountBook = accountBookRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException((String.valueOf(id))));
+
+            AccountDetailResponseDto response = AccountDetailResponseDto.from(detailAccountBook);
+            return response;
+    }
 }

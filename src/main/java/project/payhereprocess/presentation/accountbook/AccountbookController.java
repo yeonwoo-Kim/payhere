@@ -46,4 +46,10 @@ public class AccountbookController {
         AccountResponseMessageDto response = accountbookService.restoreAccountBook(id);
         return new ResponseEntity(response, HttpStatus.OK);
     }
+
+    @GetMapping("/account/show")
+    public ResponseEntity<AccountDetailResponseDto> show(@RequestParam Long id) {
+        AccountDetailResponseDto response = accountbookService.detailAccountBook(id);
+        return ResponseEntity.ok(response);
+    }
 }
