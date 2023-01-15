@@ -12,9 +12,9 @@ public class AccountDetailResponseDto {
     private final Long id;
     private final Long amount;
     private final String memo;
+    private final Boolean isDeleted;
     private final LocalDateTime useDate;
     private final LocalDateTime updateDate;
-    
     public static AccountDetailResponseDto from(AccountBook accountBook) {
         return AccountDetailResponseDto.builder()
                 .id(accountBook.getId())
@@ -22,6 +22,7 @@ public class AccountDetailResponseDto {
                 .memo(accountBook.getMemo())
                 .useDate(accountBook.getUseDate())
                 .updateDate(accountBook.getUpdateDate())
+                .isDeleted(accountBook.getIsDeleted())
                 .build();
     }
 }

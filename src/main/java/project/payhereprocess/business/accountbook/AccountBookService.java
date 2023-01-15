@@ -2,6 +2,7 @@ package project.payhereprocess.business.accountbook;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import project.payhereprocess.business.accountbook.command.AccountCommand;
 import project.payhereprocess.domain.AccountBook;
 import project.payhereprocess.domain.User;
@@ -9,7 +10,6 @@ import project.payhereprocess.persistence.accountbook.AccountBookRepository;
 import project.payhereprocess.persistence.user.UserRepository;
 import project.payhereprocess.presentation.accountbook.dto.*;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -87,7 +87,7 @@ public class AccountBookService {
         }
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public AccountDetailResponseDto detailAccountBook(Long id) {
         AccountBook detailAccountBook = accountBookRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException((String.valueOf(id))));

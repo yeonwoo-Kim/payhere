@@ -54,11 +54,13 @@ public class AccountBook {
 
     public AccountBook delete() {
         this.isDeleted = true;
+        this.updateDate = LocalDateTime.now();
         return this;
     }
 
     public AccountBook restore() {
         this.isDeleted = false;
+        this.updateDate = LocalDateTime.now();
         return this;
     }
 }
