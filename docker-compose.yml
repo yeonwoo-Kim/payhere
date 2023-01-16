@@ -15,3 +15,12 @@ services:
       - 3309:3306
     volumes:
       - ./db/mysql/data:/var/lib/mysql
+  payhere-service:
+    build: .
+    ports:
+      - 8080:8080
+    restart: on-failure
+    environment:
+      PAYHERE_DB_CONNECTION_URI: "jdbc:mysql://db:3309/payhere?serverTimezone=Asia/Seoul&characterEncoding=UTF-8"
+    depends_on:
+      - db

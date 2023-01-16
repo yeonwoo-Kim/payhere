@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3309/payhere?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: ${PAYHERE_DB_CONNECTION_URI:jdbc:mysql://localhost:3309/payhere?serverTimezone=Asia/Seoul&characterEncoding=UTF-8}
     username: root
     password: password
   jpa:
