@@ -48,6 +48,7 @@ public class AccountBook {
     public AccountBook update(AccountUpdateRequestDto dto) {
         this.amount = dto.getAmount();
         this.memo = dto.getMemo();
+        this.updateDate = LocalDateTime.now();
         return this;
     }
 
