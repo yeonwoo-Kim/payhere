@@ -14,6 +14,7 @@ import project.payhereprocess.persistence.user.UserRepository;
 import project.payhereprocess.presentation.accountbook.dto.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +45,7 @@ public class AccountBookService {
         List<AccountBook> savedAccountList = accountBookRepository.findAllByUserId(findUser.getId());
 
         // account boot entity list를 response dto list로 변환
-        return savedAccountList.stream().map(accountBook -> GetAllAccountBookResponseDto.from(accountBook)).toList();
+        return savedAccountList.stream().map(accountBook -> GetAllAccountBookResponseDto.from(accountBook)).collect(Collectors.toList());
     }
 
     @Transactional
