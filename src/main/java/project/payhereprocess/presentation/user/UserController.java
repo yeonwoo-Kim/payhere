@@ -31,6 +31,7 @@ public class UserController {
 
     /**
      * 회원가입
+     *
      * @param dto
      * @return
      */
@@ -38,11 +39,13 @@ public class UserController {
     public ResponseEntity<UserResponseDto> signup(@RequestBody @Valid SignupRequestDto dto) {
         UserCommand command = dto.toCommand();
         UserResponseDto response = userService.command(command);
-        return new ResponseEntity(response, HttpStatus.CREATED);
+        return new ResponseEntity(response, HttpStatus.OK);
     }
+
 
     /**
      * 로그인
+     *
      * @param loginDto
      * @return
      */

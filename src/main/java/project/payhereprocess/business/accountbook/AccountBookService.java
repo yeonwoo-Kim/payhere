@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import project.payhereprocess.business.accountbook.command.AccountCommand;
 import project.payhereprocess.domain.AccountBook;
 import project.payhereprocess.domain.User;
+import project.payhereprocess.exception.BusinessException;
+import project.payhereprocess.exception.ErrorCode;
 import project.payhereprocess.jwt.TokenProvider;
 import project.payhereprocess.persistence.accountbook.AccountBookRepository;
 import project.payhereprocess.persistence.user.UserRepository;
@@ -49,10 +51,10 @@ public class AccountBookService {
     public AccountResponseDto updateAccountBook(Long id, AccountUpdateRequestDto dto, String email) {
         User findUser = authorizedUser(email);
         AccountBook accountBookForUpdate = accountBookRepository.findByIdAndUserId(id, findUser.getId())
-                .orElseThrow(() -> new RuntimeException(String.valueOf(id)));
+                .orElseThrow(() -> new BusinessException("리소스에 대한 접근 권한이 없습니다.", ErrorCode.NOT_AUTHORITY));
 
         if (accountBookForUpdate.getIsDeleted()) {
-            new RuntimeException(String.valueOf(id));
+            new BusinessException("이미 삭제된 내역입니다.", ErrorCode.IS_DELETED);
         } else accountBookForUpdate.update(dto);
 
         return new AccountResponseDto(accountBookForUpdate.getAmount(), accountBookForUpdate.getMemo(), "정상적으로 수정되었습니다.");
@@ -63,7 +65,7 @@ public class AccountBookService {
         User findUser = authorizedUser(email);
 
         AccountBook accountBookForDelete = accountBookRepository.findByIdAndUserId(id, findUser.getId())
-                .orElseThrow(() -> new RuntimeException(String.valueOf(id)));
+                .orElseThrow(() -> new BusinessException("리소스에 대한 접근 권한이 없습니다.", ErrorCode.NOT_AUTHORITY));
 
 
         if (accountBookForDelete.getIsDeleted()) {
@@ -79,7 +81,7 @@ public class AccountBookService {
         User findUser = authorizedUser(email);
 
         AccountBook accountBookForRestore = accountBookRepository.findByIdAndUserId(id, findUser.getId())
-                .orElseThrow(() -> new RuntimeException(String.valueOf(id)));
+                .orElseThrow(() -> new BusinessException("리소스에 대한 접근 권한이 없습니다.", ErrorCode.NOT_AUTHORITY));
 
         if (accountBookForRestore.getIsDeleted()) {
             accountBookForRestore.restore();
@@ -93,7 +95,7 @@ public class AccountBookService {
     public AccountDetailResponseDto detailAccountBook(Long id, String email) {
         User findUser = authorizedUser(email);
         AccountBook detailAccountBook = accountBookRepository.findByIdAndUserId(id, findUser.getId())
-                .orElseThrow(() -> new RuntimeException((String.valueOf(id))));
+                .orElseThrow(() -> new BusinessException("리소스에 대한 접근 권한이 없습니다.", ErrorCode.NOT_AUTHORITY));
 
         AccountDetailResponseDto response = AccountDetailResponseDto.from(detailAccountBook);
         return response;
@@ -102,7 +104,7 @@ public class AccountBookService {
     private User authorizedUser(String email) {
         // 인증된 사용자의 User 확인
         User findUser = userRepository.findOneByEmail(email)
-                .orElseThrow(() -> new RuntimeException(String.valueOf(email)));
+                .orElseThrow(() -> new BusinessException("존재하지 않는 사용자입니다.", ErrorCode.USER_NOT_FOUND));
         return findUser;
     }
 }
