@@ -10,7 +10,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "account_book")
+@Table(name = "account_books")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AccountBook {
