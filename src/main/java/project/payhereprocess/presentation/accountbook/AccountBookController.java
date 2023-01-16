@@ -10,6 +10,7 @@ import project.payhereprocess.business.accountbook.AccountBookService;
 import project.payhereprocess.business.accountbook.command.AccountCommand;
 import project.payhereprocess.presentation.accountbook.dto.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -34,7 +35,7 @@ public class AccountBookController {
      * @return
      */
     @PostMapping("/account/add")
-    public ResponseEntity<AccountResponseDto> insert(@RequestBody AccountRequestDto dto) {
+    public ResponseEntity<AccountResponseDto> insert(@RequestBody @Valid AccountRequestDto dto) {
         AccountCommand command = dto.toCommand();
         AccountResponseDto response = accountbookService.registerAccountBook(command, userEmail());
         return new ResponseEntity(response, HttpStatus.CREATED);

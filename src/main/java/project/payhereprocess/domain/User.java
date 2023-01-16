@@ -27,9 +27,6 @@ public class User implements UserDetails {
 
     @Column(name = "password", nullable = false)
     private String password;
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Builder.Default
-    private List<String> roles = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -1,7 +1,6 @@
 package project.payhereprocess.presentation.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.assertj.core.api.AbstractThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import project.payhereprocess.exception.BusinessException;
 import project.payhereprocess.presentation.user.dto.SignupRequestDto;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,7 +30,7 @@ class UserControllerTest {
     @DisplayName("회원가입 API 성공")
     void signup_success() throws Exception {
         // given
-        SignupRequestDto notDuplicatedEmailDto = new SignupRequestDto("any@any.com", "password");
+        SignupRequestDto notDuplicatedEmailDto = new SignupRequestDto("email@gmail.com", "password");
 
         // when
         ResultActions result = postRequest("/user/signup", notDuplicatedEmailDto);
@@ -52,12 +51,15 @@ class UserControllerTest {
         postRequest("/user/signup", duplicatedEmailDto);
 
         // when
-        AbstractThrowableAssert<?, ? extends Throwable> expectedException = assertThatThrownBy(
-                () -> postRequest("/user/signup", duplicatedEmailDto)
-        );
+        ResultActions result = postRequest("/user/signup", duplicatedEmailDto);
 
         // then
-        expectedException.getCause().isInstanceOf(BusinessException.class);
+        result
+                .andExpectAll(
+                        status().isBadRequest(),
+                        mockResult -> assertTrue(mockResult.getResolvedException().getClass().isAssignableFrom(
+                                BusinessException.class))
+                );
     }
 
     private ResultActions postRequest(String requestUrl, Object content) throws Exception {
