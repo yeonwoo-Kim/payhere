@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.payhereprocess.domain.User;
@@ -13,8 +12,7 @@ import project.payhereprocess.persistence.user.UserRepository;
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
-private final UserRepository userRepository;
-private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional

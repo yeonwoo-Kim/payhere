@@ -15,6 +15,7 @@ public class AccountDetailResponseDto {
     private final Boolean isDeleted;
     private final LocalDateTime useDate;
     private final LocalDateTime updateDate;
+
     public static AccountDetailResponseDto from(AccountBook accountBook) {
         return AccountDetailResponseDto.builder()
                 .id(accountBook.getId())

@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface AccountBookRepository extends JpaRepository<AccountBook, Long> {
     List<AccountBook> findAllByUserId(Long userId);
-
     Optional<AccountBook> findById(Long id);
+
+    Optional<AccountBook> findByIdAndUserId(Long id, Long userId);
 }

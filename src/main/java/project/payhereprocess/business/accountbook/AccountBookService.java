@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.payhereprocess.business.accountbook.command.AccountCommand;
 import project.payhereprocess.domain.AccountBook;
 import project.payhereprocess.domain.User;
+import project.payhereprocess.jwt.TokenProvider;
 import project.payhereprocess.persistence.accountbook.AccountBookRepository;
 import project.payhereprocess.persistence.user.UserRepository;
 import project.payhereprocess.presentation.accountbook.dto.*;
@@ -18,25 +19,24 @@ public class AccountBookService {
     private final AccountBookRepository accountBookRepository;
     private final UserRepository userRepository;
 
-    @Transactional
-    public AccountResponseDto registerAccountBook(AccountCommand command) {
-        User findUser = userRepository.findById(command.getUserId())
-                .orElseThrow(() -> new RuntimeException(String.valueOf(command.getUserId())));
+    private final TokenProvider tokenProvider;
 
+    @Transactional
+    public AccountResponseDto registerAccountBook(AccountCommand command, String email) {
+        User findUser = authorizedUser(email);
         AccountBook newAccount = AccountBook.builder()
                 .amount(command.getAmount())
                 .memo(command.getMemo())
                 .user(findUser)
                 .build();
         AccountBook savedAccount = accountBookRepository.save(newAccount);
-        return new AccountResponseDto("email", savedAccount.getAmount(), savedAccount.getMemo(), "가계부 내역이 저장되었습니다.");
+        return new AccountResponseDto(savedAccount.getAmount(), savedAccount.getMemo(), "가계부 내역이 저장되었습니다.");
     }
 
     @Transactional
-    public List<GetAllAccountBookResponseDto> getAllAccount(Long userId) {
-        // 사용자가 존재하는지 확인
-        User findUser = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException(String.valueOf(userId)));
+    public List<GetAllAccountBookResponseDto> getAllAccount(String email) {
+
+        User findUser = authorizedUser(email);
 
         // 사용자 id로 account book 조회
         List<AccountBook> savedAccountList = accountBookRepository.findAllByUserId(findUser.getId());
@@ -46,22 +46,23 @@ public class AccountBookService {
     }
 
     @Transactional
-    public AccountResponseDto updateAccountBook(Long id, AccountUpdateRequestDto dto) {
-        // 해당하는 Account 내역 조회
-        AccountBook accountBookForUpdate = accountBookRepository.findById(id)
+    public AccountResponseDto updateAccountBook(Long id, AccountUpdateRequestDto dto, String email) {
+        User findUser = authorizedUser(email);
+        AccountBook accountBookForUpdate = accountBookRepository.findByIdAndUserId(id, findUser.getId())
                 .orElseThrow(() -> new RuntimeException(String.valueOf(id)));
 
         if (accountBookForUpdate.getIsDeleted()) {
             new RuntimeException(String.valueOf(id));
         } else accountBookForUpdate.update(dto);
 
-        return new AccountResponseDto(accountBookForUpdate.getUser().getEmail(), accountBookForUpdate.getAmount(), accountBookForUpdate.getMemo(), "정상적으로 수정되었습니다.");
+        return new AccountResponseDto(accountBookForUpdate.getAmount(), accountBookForUpdate.getMemo(), "정상적으로 수정되었습니다.");
     }
 
     @Transactional
-    public AccountResponseMessageDto deleteAccountBook(Long id) {
-        // 해당하는 Account 내역 조회
-        AccountBook accountBookForDelete = accountBookRepository.findById(id)
+    public AccountResponseMessageDto deleteAccountBook(Long id, String email) {
+        User findUser = authorizedUser(email);
+
+        AccountBook accountBookForDelete = accountBookRepository.findByIdAndUserId(id, findUser.getId())
                 .orElseThrow(() -> new RuntimeException(String.valueOf(id)));
 
 
@@ -74,9 +75,10 @@ public class AccountBookService {
     }
 
     @Transactional
-    public AccountResponseMessageDto restoreAccountBook(Long id) {
-        // 해당하는 Account 내역 조회
-        AccountBook accountBookForRestore = accountBookRepository.findById(id)
+    public AccountResponseMessageDto restoreAccountBook(Long id, String email) {
+        User findUser = authorizedUser(email);
+
+        AccountBook accountBookForRestore = accountBookRepository.findByIdAndUserId(id, findUser.getId())
                 .orElseThrow(() -> new RuntimeException(String.valueOf(id)));
 
         if (accountBookForRestore.getIsDeleted()) {
@@ -88,11 +90,19 @@ public class AccountBookService {
     }
 
     @Transactional(readOnly = true)
-    public AccountDetailResponseDto detailAccountBook(Long id) {
-        AccountBook detailAccountBook = accountBookRepository.findById(id)
+    public AccountDetailResponseDto detailAccountBook(Long id, String email) {
+        User findUser = authorizedUser(email);
+        AccountBook detailAccountBook = accountBookRepository.findByIdAndUserId(id, findUser.getId())
                 .orElseThrow(() -> new RuntimeException((String.valueOf(id))));
 
-            AccountDetailResponseDto response = AccountDetailResponseDto.from(detailAccountBook);
-            return response;
+        AccountDetailResponseDto response = AccountDetailResponseDto.from(detailAccountBook);
+        return response;
+    }
+
+    private User authorizedUser(String email) {
+        // 인증된 사용자의 User 확인
+        User findUser = userRepository.findOneByEmail(email)
+                .orElseThrow(() -> new RuntimeException(String.valueOf(email)));
+        return findUser;
     }
 }

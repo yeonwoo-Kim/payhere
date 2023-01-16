@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class AccountResponseDto {
-    private final String email;
     private final Long amount;
     private final String memo;
     private final String responseMessage;
